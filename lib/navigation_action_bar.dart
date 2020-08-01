@@ -46,7 +46,7 @@ class NavigationActionBar extends StatefulWidget {
 
 class NavigationActionBarState extends State<NavigationActionBar>
     with SingleTickerProviderStateMixin {
-  double height = 70;
+  double height = 64;
   int selectedIndex;
   AnimationController controller;
   Animation<double> translation;
@@ -102,8 +102,9 @@ class NavigationActionBarState extends State<NavigationActionBar>
             alignment: Alignment.center,
             children: widget.subItems.reversed.map((item) {
               int index = widget.subItems.indexOf(item);
+              print("index: $index ");
               return Positioned(
-                bottom: 100,
+                bottom: 64,
                 left: 0 +
                     ((index > mid) ? (index - mid) * widget.subItemSpacing : 0)
                         .toDouble(),
@@ -132,6 +133,8 @@ class NavigationActionBarState extends State<NavigationActionBar>
                       size: item.size,
                       mainIndex: widget.mainIndex,
                       index: index,
+                      color: item.color,
+                      title: item.title,
                     ),
                   ),
                 ),
@@ -183,7 +186,7 @@ class NavigationActionBarState extends State<NavigationActionBar>
                     size: item.size,
                     index: index,
                     onTap: _buttonTap,
-                    color: widget.accentColor,
+                    color: widget.backgroundColor,
                   );
                 } else {
                   return BarItem(
@@ -194,6 +197,7 @@ class NavigationActionBarState extends State<NavigationActionBar>
                     selected: item.selectedColor,
                     unselected: item.unselectedColor,
                     currentIndex: selectedIndex,
+                    title: item.title,
                   );
                 }
               }).toList(),
@@ -205,6 +209,7 @@ class NavigationActionBarState extends State<NavigationActionBar>
   }
 
   void _buttonTap(double index) {
+    assert(widget.onTap != null);
     if (widget.onTap != null) {
       widget.onTap(index);
       setState(() {
@@ -248,11 +253,14 @@ class NavBarItem {
   final double size;
   final Color selectedColor;
   final Color unselectedColor;
+  final Color color;
+  final String title;
 
-  NavBarItem({
-    this.iconData,
-    this.size,
-    this.selectedColor = Colors.redAccent,
-    this.unselectedColor = Colors.black,
-  });
+  NavBarItem(
+      {this.iconData,
+      this.size,
+      this.title = '',
+      this.selectedColor = Colors.redAccent,
+      this.unselectedColor = Colors.black,
+      this.color = Colors.transparent});
 }

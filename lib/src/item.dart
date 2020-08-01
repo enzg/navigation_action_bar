@@ -2,14 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class BarItem extends StatelessWidget {
-  final int index;
-  final int currentIndex;
-  final ValueChanged<double> onTap;
-  final IconData iconData;
-  final double size;
-  final Color selected;
-  final Color unselected;
-
   const BarItem({
     Key key,
     this.index,
@@ -19,7 +11,17 @@ class BarItem extends StatelessWidget {
     this.selected,
     this.unselected,
     this.currentIndex,
+    this.title
   }) : super(key: key);
+
+  final int currentIndex;
+  final IconData iconData;
+  final int index;
+  final ValueChanged<double> onTap;
+  final Color selected;
+  final double size;
+  final String title;
+  final Color unselected;
 
   @override
   Widget build(BuildContext context) {
@@ -29,25 +31,20 @@ class BarItem extends StatelessWidget {
         onTap(index.toDouble());
       },
       child: Container(
-        child: Icon(
-          iconData,
-          size: size,
-          color: (currentIndex == index) ? selected : unselected,
-        ),
+        padding:EdgeInsets.only(top: 7),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+          Icon( iconData, size: size, color: (currentIndex == index) ? selected : unselected ),
+          SizedBox(height:2),
+          Text(title,textAlign: TextAlign.center,style: TextStyle(fontSize: 10,fontWeight:FontWeight.w700,color:(currentIndex == index) ? selected : unselected  ),)
+        ],)
       ),
     );
   }
 }
 
 class SpecialBarItem extends StatefulWidget {
-  final int index;
-  final ValueChanged<double> onTap;
-  final Duration duration;
-  final IconData iconData;
-  final double size;
-  final Color color;
-  final AnimationController animationController;
-
   const SpecialBarItem({
     Key key,
     this.color,
@@ -58,6 +55,14 @@ class SpecialBarItem extends StatefulWidget {
     this.iconData,
     this.size,
   }) : super(key: key);
+
+  final AnimationController animationController;
+  final Color color;
+  final Duration duration;
+  final IconData iconData;
+  final int index;
+  final ValueChanged<double> onTap;
+  final double size;
 
   @override
   _SpecialBarItemState createState() => _SpecialBarItemState();
@@ -111,12 +116,6 @@ class _SpecialBarItemState extends State<SpecialBarItem>
 }
 
 class ActionBarItem extends StatelessWidget {
-  final int index;
-  final int mainIndex;
-  final ValueChanged<double> onTap;
-  final IconData iconData;
-  final double size;
-
   const ActionBarItem({
     Key key,
     this.index,
@@ -124,13 +123,23 @@ class ActionBarItem extends StatelessWidget {
     this.mainIndex,
     this.iconData,
     this.size,
+    this.color = Colors.transparent,
+    this.title = ''
   }) : super(key: key);
+
+  final Color color;
+  final IconData iconData;
+  final int index;
+  final int mainIndex;
+  final ValueChanged<double> onTap;
+  final double size;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: this.color,
         shape: BoxShape.circle,
       ),
       alignment: Alignment.bottomCenter,
@@ -138,17 +147,23 @@ class ActionBarItem extends StatelessWidget {
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onTap: () {
-          String str = mainIndex.toString() + "." + index.toString();
-          onTap(double.parse(str));
+          print(this.index);
+          onTap((5 + this.index).toDouble());
         },
         child: Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
           ),
-          child: Icon(
+          child: Column(
+            mainAxisAlignment:MainAxisAlignment.center,
+            children: <Widget>[
+          Icon(
             iconData,
             size: size,
           ),
+          SizedBox(height: 2,),
+          Text(this.title,textAlign: TextAlign.center,style: TextStyle(fontSize:10,color: Colors.black,decoration:TextDecoration.none),) 
+          ],)
         ),
       ),
     );
